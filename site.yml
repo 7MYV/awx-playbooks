@@ -1,0 +1,19 @@
+- name: First AWX run
+  hosts: all
+  become: true
+  tasks:
+    - name: Install nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: Start and enable nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Create a lab user
+      ansible.builtin.user:
+        name: labuser
+        state: present
