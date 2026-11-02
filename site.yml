@@ -15,5 +15,5 @@
 
     - name: Create a lab user
       ansible.builtin.user:
-        name: labuser
+        name: "{{ new_user }}"
         state: present
