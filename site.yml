@@ -1,4 +1,4 @@
-- name: First AWX run
+- name: Set up nginx
   hosts: all
   become: true
   tasks:
@@ -12,8 +12,3 @@
         name: nginx
         state: started
         enabled: true
-
-    - name: Create a lab user
-      ansible.builtin.user:
-        name: "{{ new_user }}"
-        state: present
