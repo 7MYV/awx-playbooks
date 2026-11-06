@@ -1,0 +1,30 @@
+- name: Prepare hosts for Icinga SSH checks
+  hosts: all
+  become: true
+  vars:
+    icinga_pubkey: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINN0ojF//JBv47UChnPW+KCgVFvyBxoKxY4sAZnEQ7LR nagios@icinga"
+  tasks:
+    - name: Enable EPEL
+      ansible.builtin.dnf:
+        name: epel-release
+        state: present
+
+    - name: Install check plugins
+      ansible.builtin.dnf:
+        name:
+          - nagios-plugins-disk
+          - nagios-plugins-load
+          - nagios-plugins-procs
+        state: present
+
+    - name: Create the icinga user (no sudo)
+      ansible.builtin.user:
+        name: icinga
+        shell: /bin/bash
+        state: present
+
+    - name: Authorize Icinga's key
+      ansible.posix.authorized_key:
+        user: icinga
+        key: "{{ icinga_pubkey }}"
+        state: present
